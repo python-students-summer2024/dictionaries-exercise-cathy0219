@@ -1,3 +1,4 @@
+[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=15328953&assignment_repo_type=AssignmentRepo)
 # Cookie Shop Assignment
 
 Your assignment today is to create a virtual cookie shop. You will do this by writing code into a file named `cookie_shop.py`. Several function definitions are indicated in that file with documentation - you must complete these functions. Your program must use each of the functions indicated here to perform the tasks they are designed to perform.
