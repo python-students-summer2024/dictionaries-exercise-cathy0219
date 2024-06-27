@@ -4,7 +4,7 @@ Do not modify this file.
 """
 
 from pathlib import Path
-import cookie_shop
+import cookie_shop_extra_credit as cookie_shop
 
 # get data from the CSV file into a list
 filepath = Path(

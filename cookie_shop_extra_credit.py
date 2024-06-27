@@ -1,23 +1,6 @@
-"""
-Functions necessary for running a virtual cookie shop.
-See README.md for instructions.
-Do not run this file directly.  Rather, run main.py instead.
-"""
-
-
 import csv
 
 def bake_cookies(filepath):
-    """
-    Opens up the CSV data file from the path specified as an argument.
-    - Each line in the file, except the first, is assumed to contain comma-separated information about one cookie.
-    - Creates a dictionary with the data from each line.
-    - Adds each dictionary to a list of all cookies that is returned.
-
-    :param filepath: The path to the data file.
-    :returns: A list of all cookie data, where each cookie is represented as a dictionary.
-    """
-    # write your code for this function below here.
     """
     Opens up the CSV data file from the path specified as an argument.
     - Each line in the file, except the first, is assumed to contain comma-separated information about one cookie.
@@ -31,17 +14,18 @@ def bake_cookies(filepath):
     with open(filepath, mode='r') as file:  
         csv_reader = csv.DictReader(file)
         for row in csv_reader:
+            # Check for the existence of the extra credit fields and provide defaults if missing
             cookie = {
                 'id': int(row['id']),
                 'title': row['title'],
                 'description': row['description'],
-                'price': float(row['price'].replace('$', '').strip())
+                'price': float(row['price'].replace('$', '').strip()),
+                'sugar_free': row.get('sugar_free', 'no').strip().lower() in ['yes', 'y'],
+                'gluten_free': row.get('gluten_free', 'no').strip().lower() in ['yes', 'y'],
+                'contains_nuts': row.get('contains_nuts', 'no').strip().lower() in ['yes', 'y']
             }
             cookies.append(cookie)
     return cookies
-
-
-
 
 def welcome():
     """
@@ -49,39 +33,42 @@ def welcome():
 
       Welcome to the Python Cookie Shop!
       We feed each according to their need.
-
+      We'd hate to trigger an allergic reaction in your body. So please answer the following questions:
+      Are you allergic to nuts? yes
+      Are you allergic to gluten? no
+      Do you suffer from diabetes? yes
     """
-    # write your code for this function below this line
     print("Welcome to the Python Cookie Shop!")
-    print("We feed each according to their need.\n")
+    print("We feed each according to their need.")
+    print("We'd hate to trigger an allergic reaction in your body. So please answer the following questions:")
+    allergic_to_nuts = input("Are you allergic to nuts? (yes/no): ").strip().lower() in ['yes', 'y']
+    allergic_to_gluten = input("Are you allergic to gluten? (yes/no): ").strip().lower() in ['yes', 'y']
+    diabetic = input("Do you suffer from diabetes? (yes/no): ").strip().lower() in ['yes', 'y']
+    return allergic_to_nuts, allergic_to_gluten, diabetic
 
-
-
-def display_cookies(cookies):
+def display_cookies(cookies, allergic_to_nuts, allergic_to_gluten, diabetic):
     """
-    Prints a list of all cookies in the shop to the user.
-    - Sample output - we show only two cookies here, but imagine the output continues for all cookiese:
-        Here are the cookies we have in the shop for you:
-
-          #1 - Basboosa Semolina Cake
-          This is a This is a traditional Middle Eastern dessert made with semolina and yogurt then soaked in a rose water syrup.
-          Price: $3.99
-
-          #2 - Vanilla Chai Cookie
-          Crisp with a smooth inside. Rich vanilla pairs perfectly with its Chai partner a combination of cinnamon ands ginger and cloves. Can you think of a better way to have your coffee AND your Vanilla Chai in the morning?
-          Price: $5.50
-
-    - If doing the extra credit version, ask the user for their dietary restrictions first, and only print those cookies that are suitable for the customer.
+    Prints a list of all cookies in the shop to the user, filtered by dietary restrictions.
 
     :param cookies: a list of all cookies in the shop, where each cookie is represented as a dictionary.
+    :param allergic_to_nuts: a boolean indicating if the user is allergic to nuts.
+    :param allergic_to_gluten: a boolean indicating if the user is allergic to gluten.
+    :param diabetic: a boolean indicating if the user is diabetic.
     """
-    # write your code for this function below this line
-    print("Here are the cookies we have in the shop for you:\n")
-    for cookie in cookies:
-        print(f"#{cookie['id']} - {cookie['title']}")
-        print(f"{cookie['description']}")
-        print(f"Price: ${cookie['price']:.2f}\n")
+    filtered_cookies = [cookie for cookie in cookies if
+                        (not allergic_to_nuts or not cookie['contains_nuts']) and
+                        (not allergic_to_gluten or not cookie['gluten_free']) and
+                        (not diabetic or not cookie['sugar_free'])]
 
+    if filtered_cookies:
+        print("Great! Here are the cookies that we think you might like:")
+        for cookie in filtered_cookies:
+            print(f"#{cookie['id']} - {cookie['title']}")
+            print(cookie['description'])
+            print(f"Price: ${cookie['price']:.2f}")
+            print()
+    else:
+        print("Sorry, there are no cookies that match your dietary needs.")
 
 def get_cookie_from_dict(id, cookies):
     """
@@ -91,12 +78,10 @@ def get_cookie_from_dict(id, cookies):
     :param cookies: a list of all cookies in the shop, where each cookie is represented as a dictionary.
     :returns: the matching cookie, as a dictionary
     """
-    # write your code for this function below this line
     for cookie in cookies:
         if cookie['id'] == id:
             return cookie
     return None
-
 
 def solicit_quantity(id, cookies):
     """
@@ -104,16 +89,11 @@ def solicit_quantity(id, cookies):
     - Validates the response.
     - Uses the get_cookie_from_dict function to get the full information about the cookie whose id is passed as an argument, including its title and price.
     - Displays the subtotal for the given quantity of this cookie, formatted to two decimal places.
-    - Follows the format (with sample responses from the user):
-
-        My favorite! How many Animal Cupcakes would you like? 5
-        Your subtotal for 5 Animal Cupcake is $4.95.
 
     :param id: the id of the cookie to ask about
     :param cookies: a list of all cookies in the shop, where each cookie is represented as a dictionary.
     :returns: The quantity the user entered, as an integer.
     """
-    # write your code for this function below this line
     cookie = get_cookie_from_dict(id, cookies)
     if cookie:
         while True:
@@ -128,7 +108,6 @@ def solicit_quantity(id, cookies):
             except ValueError:
                 print("Invalid input. Please enter a number.")
     return 0
-
 
 def solicit_order(cookies):
     """
@@ -146,46 +125,32 @@ def solicit_order(cookies):
 
     :returns: A list of the ids and quantities of each cookies the user wants to order.
     """
-    # write your code for this function below this line
-    order = []
+    orders = []
     while True:
-        choice = input('Enter the number of any cookie you would like to purchase: ')
-        if choice.lower() in ['finished', 'done', 'quit', 'exit']:
+        cookie_id = input("Please enter the number of any cookie you would like to purchase (type 'finished' to end): ").strip().lower()
+        if cookie_id in ['finished', 'done', 'quit', 'exit']:
             break
         try:
-            cookie_id = int(choice)
-            cookie = get_cookie_from_dict(cookie_id, cookies)
-            if cookie:
+            cookie_id = int(cookie_id)
+            if get_cookie_from_dict(cookie_id, cookies):
                 quantity = solicit_quantity(cookie_id, cookies)
                 if quantity > 0:
-                    order.append({'id': cookie_id, 'quantity': quantity})
+                    orders.append({'id': cookie_id, 'quantity': quantity})
             else:
-                print("Sorry, we don't have a cookie with that ID.\n")
+                print("Invalid cookie ID. Please try again.")
         except ValueError:
-            print("Please enter a valid number.\n")
-    return order
-
+            print("Invalid input. Please enter a number.")
+    return orders
 
 def display_order_total(order, cookies):
     """
     Prints a summary of the user's complete order.
     - Includes a breakdown of the title and quantity of each cookie the user ordereed.
     - Includes the total cost of the complete order, formatted to two decimal places.
-    - Follows the format:
 
-        Thank you for your order. You have ordered:
-
-        -8 Animal Cupcake
-        -1 Basboosa Semolina Cake
-
-        Your total is $11.91.
-        Please pay with Bitcoin before picking-up.
-
-        Thank you!
-        -The Python Cookie Shop Robot.
-
+    :param order: A list of dictionaries, where each dictionary contains 'id' and 'quantity' of a cookie.
+    :param cookies: A list of all cookies in the shop, where each cookie is represented as a dictionary.
     """
-    # write your code for this function below this line
     if order:
         print("Thank you for your order. You have ordered:")
         total_price = 0
@@ -199,8 +164,8 @@ def display_order_total(order, cookies):
         print("Please pay with Bitcoin before picking-up.")
     else:
         print("You didn't order any cookies.")
-    print("Thank you!\n-The Python Cookie Shop Robot.")
 
+    print("Thank you!\n-The Python Cookie Shop Robot.")
 
 def run_shop(cookies):
     """
@@ -210,8 +175,7 @@ def run_shop(cookies):
 
     :param cookies: A list of all cookies in the shop, where each cookie is represented as a dictionary.
     """
-    # write your code for this function below here.
-    welcome()
-    display_cookies(cookies)
+    allergic_to_nuts, allergic_to_gluten, diabetic = welcome()
+    display_cookies(cookies, allergic_to_nuts, allergic_to_gluten, diabetic)
     order = solicit_order(cookies)
     display_order_total(order, cookies)

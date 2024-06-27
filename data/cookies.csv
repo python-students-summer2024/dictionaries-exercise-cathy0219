@@ -1,11 +1,11 @@
-id,title,description,price
-1,Basboosa Semolina Cake,This is a This is a traditional Middle Eastern dessert made with semolina and yogurt then soaked in a rose water syrup.,$3.99
-2,Vanilla Chai Cookie,Crisp with a smooth inside. Rich vanilla pairs perfectly with its Chai partner a combination of cinnamon ands ginger and cloves. Can you think of a better way to have your coffee AND your Vanilla Chai in the morning?,$5.50
-3,Fudge Strip Cookie,Everyone needs to experience this one ' with the flavors of a soft baked cookie the 'fudge stripe' is our excuse for adding the perfect amount of rich decadent chocolate.,$5.78
-4,Animal Cupcake,Go wild and choose from a set of animal faces or one animal face printed on edible sugar paper.,$0.99
-5,Spiced Mexican Wedding Cookies,Beautifully round buttery pecan dotted cookies are rolled in sweet blizzard of snowy white powdered sugar and they’ll leave you savoring every tender bite.,$6.79
-6,Earl Grey Tea Cookies,These cookies are rather literal and Amelia Bedelia-esque in that they really contain tea leaves which are ground fine with the flour and give them a rich yet delicate flavor. With the buttery crunch of a sophisticated shortbread - these are dangerously addictive.,$4.47
-7,Malawian Sweet Potato Cookies,Malawi is a very poor country but the people are know for their hospitality and friendliness - it is known as the "Warm Heart of Africa". Tradition dictates cutting these Mbatata cookies into the shape of a heart.,$9.99
-8,Chinese Almond Cookies,Often served at festivals as well as New Year celebrations.,$5.59
-9,Corn Cookie,Maize represents vitality according to the native corn clans of the high Sonoran Desert in Arizona (Navaho and Hopi and Yaqui tribes et al.),$6.74
-10,Oatmeal Raisin Cookie,Chewy sweet and crunchy on the outside.  These have made happy children for generations.,$2.50
+id,title,description,price,sugar_free,gluten_free,contains_nuts
+1,Basboosa Semolina Cake,This is a traditional Middle Eastern dessert made with semolina and yogurt then soaked in a rose water syrup.,$3.99,no,no,no
+2,Vanilla Chai Cookie,Crisp with a smooth inside. Rich vanilla pairs perfectly with its Chai partner a combination of cinnamon ands ginger and cloves. Can you think of a better way to have your coffee AND your Vanilla Chai in the morning?,$5.50,no,no,yes
+3,Fudge Strip Cookie,Everyone needs to experience this one ' with the flavors of a soft baked cookie the 'fudge stripe' is our excuse for adding the perfect amount of rich decadent chocolate.,$5.78,no,yes,no
+4,Animal Cupcake,Go wild and choose from a set of animal faces or one animal face printed on edible sugar paper.,$0.99,yes,yes,no
+5,Spiced Mexican Wedding Cookies,Beautifully round buttery pecan dotted cookies are rolled in sweet blizzard of snowy white powdered sugar and they’ll leave you savoring every tender bite.,$6.79,no,no,yes
+6,Earl Grey Tea Cookies,These cookies are rather literal and Amelia Bedelia-esque in that they really contain tea leaves which are ground fine with the flour and give them a rich yet delicate flavor. With the buttery crunch of a sophisticated shortbread - these are dangerously addictive.,$4.47,no,yes,no
+7,Malawian Sweet Potato Cookies,Malawi is a very poor country but the people are know for their hospitality and friendliness - it is known as the "Warm Heart of Africa". Tradition dictates cutting these Mbatata cookies into the shape of a heart.,$9.99,no,yes,no
+8,Chinese Almond Cookies,Often served at festivals as well as New Year celebrations.,$5.59,no,no,yes
+9,Corn Cookie,Maize represents vitality according to the native corn clans of the high Sonoran Desert in Arizona (Navaho and Hopi and Yaqui tribes et al.),$6.74,no,yes,no
+10,Oatmeal Raisin Cookie,Chewy sweet and crunchy on the outside.  These have made happy children for generations.,$2.50,no,no,no
