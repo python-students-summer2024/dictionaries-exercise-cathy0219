@@ -28,47 +28,35 @@ def bake_cookies(filepath):
     return cookies
 
 def welcome():
-    """
-    Prints a welcome message to the customer in the format:
-
-      Welcome to the Python Cookie Shop!
-      We feed each according to their need.
-      We'd hate to trigger an allergic reaction in your body. So please answer the following questions:
-      Are you allergic to nuts? yes
-      Are you allergic to gluten? no
-      Do you suffer from diabetes? yes
-    """
     print("Welcome to the Python Cookie Shop!")
     print("We feed each according to their need.")
-    print("We'd hate to trigger an allergic reaction in your body. So please answer the following questions:")
-    allergic_to_nuts = input("Are you allergic to nuts? (yes/no): ").strip().lower() in ['yes', 'y']
-    allergic_to_gluten = input("Are you allergic to gluten? (yes/no): ").strip().lower() in ['yes', 'y']
-    diabetic = input("Do you suffer from diabetes? (yes/no): ").strip().lower() in ['yes', 'y']
-    return allergic_to_nuts, allergic_to_gluten, diabetic
 
-def display_cookies(cookies, allergic_to_nuts, allergic_to_gluten, diabetic):
-    """
-    Prints a list of all cookies in the shop to the user, filtered by dietary restrictions.
+def get_dietary_restrictions():
+    print("\nWe'd hate to trigger an allergic reaction in your body. So please answer the following questions:")
+    nuts = input("Are you allergic to nuts? ").strip().lower() in ['yes', 'y']
+    gluten = input("Are you allergic to gluten? ").strip().lower() in ['yes', 'y']
+    sugar = input("Do you suffer from diabetes? ").strip().lower() in ['yes', 'y']
+    return {'nuts': nuts, 'gluten': gluten, 'sugar': sugar}
 
-    :param cookies: a list of all cookies in the shop, where each cookie is represented as a dictionary.
-    :param allergic_to_nuts: a boolean indicating if the user is allergic to nuts.
-    :param allergic_to_gluten: a boolean indicating if the user is allergic to gluten.
-    :param diabetic: a boolean indicating if the user is diabetic.
-    """
-    filtered_cookies = [cookie for cookie in cookies if
-                        (not allergic_to_nuts or not cookie['contains_nuts']) and
-                        (not allergic_to_gluten or not cookie['gluten_free']) and
-                        (not diabetic or not cookie['sugar_free'])]
+def filter_cookies(cookies, restrictions):
+    filtered_cookies = []
+    for cookie in cookies:
+        if restrictions['nuts'] and cookie['contains_nuts']:
+            continue
+        if restrictions['gluten'] and not cookie['gluten_free']:
+            continue
+        if restrictions['sugar'] and not cookie['sugar_free']:
+            continue
+        filtered_cookies.append(cookie)
+    return filtered_cookies
 
-    if filtered_cookies:
-        print("Great! Here are the cookies that we think you might like:")
-        for cookie in filtered_cookies:
-            print(f"#{cookie['id']} - {cookie['title']}")
-            print(cookie['description'])
-            print(f"Price: ${cookie['price']:.2f}")
-            print()
-    else:
-        print("Sorry, there are no cookies that match your dietary needs.")
+def display_cookies(cookies):
+    print("Here are the cookies we have in the shop for you:\n")
+    for cookie in cookies:
+        print(f"#{cookie['id']} - {cookie['title']}")
+        print(f"{cookie['description']}")
+        print(f"Price: ${cookie['price']:.2f}\n")
+
 
 def get_cookie_from_dict(id, cookies):
     """
@@ -131,11 +119,12 @@ def solicit_order(cookies):
         if cookie_id in ['finished', 'done', 'quit', 'exit']:
             break
         try:
-            cookie_id = int(cookie_id)
-            if get_cookie_from_dict(cookie_id, cookies):
-                quantity = solicit_quantity(cookie_id, cookies)
+            cookie_id_int = int(cookie_id)
+            cookie = get_cookie_from_dict(cookie_id_int, cookies)
+            if cookie:
+                quantity = solicit_quantity(cookie_id_int, cookies)
                 if quantity > 0:
-                    orders.append({'id': cookie_id, 'quantity': quantity})
+                    orders.append({'id': cookie_id_int, 'quantity': quantity})
             else:
                 print("Invalid cookie ID. Please try again.")
         except ValueError:
@@ -175,7 +164,9 @@ def run_shop(cookies):
 
     :param cookies: A list of all cookies in the shop, where each cookie is represented as a dictionary.
     """
-    allergic_to_nuts, allergic_to_gluten, diabetic = welcome()
-    display_cookies(cookies, allergic_to_nuts, allergic_to_gluten, diabetic)
-    order = solicit_order(cookies)
+    welcome()
+    restrictions = get_dietary_restrictions()
+    filtered_cookies = filter_cookies(cookies, restrictions)
+    display_cookies(filtered_cookies)
+    order = solicit_order(filtered_cookies)
     display_order_total(order, cookies)
